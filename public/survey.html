@@ -12,11 +12,34 @@
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
+    <!-- Chosen -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.jquery.min.js"></script>
+
     <title>Find Friends | Survey</title>
 </head>
 
 <body>
     <div class="container">
+        <div id="matchModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="matchName"></p>
+                        <img id="matchImg" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <form>
             <div class="form-group">
                 <label for="name">Full Name</label>
@@ -41,7 +64,8 @@
 
             <div class="form-group">
                 <h5>Question Two</h5>
-                <label for="questionTwo">Generally speaking, you rely more on your experience than your imagination.</label>
+                <label for="questionTwo">Generally speaking, you rely more on your experience than your
+                    imagination.</label>
                 <select class="form-control" id="questionTwo">
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -53,7 +77,8 @@
 
             <div class="form-group">
                 <h5>Question Three</h5>
-                <label for="questionThree">You find it easy to stay relaxed and focused even when there is some pressure.</label>
+                <label for="questionThree">You find it easy to stay relaxed and focused even when there is some
+                    pressure.</label>
                 <select class="form-control" id="questionThree">
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -101,7 +126,8 @@
 
             <div class="form-group">
                 <h5>Question Seven</h5>
-                <label for="questionSeven">In a discussion, truth should be more important than people’s sensitivities.</label>
+                <label for="questionSeven">In a discussion, truth should be more important than people’s
+                    sensitivities.</label>
                 <select class="form-control" id="questionSeven">
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -125,7 +151,8 @@
 
             <div class="form-group">
                 <h5>Question Nine</h5>
-                <label for="questionNine">You think that everyone’s views should be respected regardless of whetherthey are supported by facts or not.
+                <label for="questionNine">You think that everyone’s views should be respected regardless of whetherthey
+                    are supported by facts or not.
                 </label>
                 <select class="form-control" id="questionNine">
                     <option value="1">1</option>
@@ -155,7 +182,7 @@
             event.preventDefault();
             var newFriend = {
                 name: $('#name').val(),
-                photo: $('#photo').val(), 
+                photo: $('#photo').val(),
                 scores: [
                     parseInt($('#questionOne').val()),
                     parseInt($('#questionTwo').val()),
@@ -171,9 +198,12 @@
             }
             console.log(newFriend);
 
-            $.post("/api/friends", newFriend, function(data) {
+            $.post("/api/friends", newFriend, function (data) {
                 if (data) {
                     console.log("You have been added to the database.")
+                    $('#matchName').text(data.name);
+                    $('#matchImg').attr('src', data.photo);
+                    $("#matchModal").modal("toggle");
                 }
                 else {
                     console.log("Error")
