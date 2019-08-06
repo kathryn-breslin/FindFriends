@@ -7,6 +7,11 @@ module.exports = function (app) {
 
     app.post('/api/friends', function (req, res) {
         // console.log(req.body.scores);
+        var match = {
+            name: "", 
+            photo: "",
+            difference: 1000
+        }
         var totalDifference = 0;
 
         for (var i = 0; i < friendsData.length; i++) {
@@ -18,12 +23,19 @@ module.exports = function (app) {
                 // console.log("New Friends scores: " + req.body.scores[j])
 
                 totalDifference += Math.abs(parseInt(req.body.scores[j]) - parseInt(singleFriend.scores[j]))
-                console.log("This is the total difference: " + totalDifference)
+                // console.log("This is the total difference: " + totalDifference)
             }
     
+            if (totalDifference <= match.difference) {
+                console.log("You've found a match!")
+                console.log(match.name = singleFriend.name);
+                console.log(match.photo = singleFriend.photo);
+                console.log(match.difference = totalDifference);
+            }
+
         }
 
         friendsData.push(req.body);
-        res.json(true);
+        res.json(match);
     })
 }
