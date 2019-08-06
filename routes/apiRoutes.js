@@ -10,11 +10,12 @@ module.exports = function (app) {
         var match = {
             name: "", 
             photo: "",
-            difference: 1000
+            difference: 100
         }
-        var totalDifference = 0;
+        var totalDifference;
 
         for (var i = 0; i < friendsData.length; i++) {
+            totalDifference = 0;
             console.log(friendsData[i].name);
             var singleFriend = friendsData[i];
 
