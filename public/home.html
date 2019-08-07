@@ -3,28 +3,296 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-    <!-- Latest compiled and minified CSS -->
+    <title>Friend Finder</title>
+    <!-- Meta data -->
+    <meta property="og:title" content="Friend Finder" />
+    <meta property="og:description" content="An application to find friends!" />
+    <meta property="og:url" content="https://friend-finder-kathryn.herokuapp.com/" />
+    <meta property="og:image" content="/assets/images/sanfran.png" />
+    <!-- Latest compiled and minified CSS & JS -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Staatliches" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./assets/style.css">
 
-    <title>Find Friends</title>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 </head>
 
 <body>
-        <div class="jumbotron">
-            <h1 class="text-center"> Friend Finder</h1>
-            <div class="text-center">
-                    <a href="/survey"><button class="btn btn-lg btn-primary">Find Friends</button></a>
-                  </div>
-        </div>
-        <footer class="footer">
-            <div class="container">
-                <p><a href="/api/friends">API Friends</a> | <a href="https://github.com/kathryn-breslin/FindFriends">FindFriends GitHub Repo</a></p>
+    <!-- Modal for Match -->
+
+    <div id="matchModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="matchName"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img id="matchImg" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="/"><button class="btn btn-primary">Take Survey</button></a>
+                </div>
             </div>
-        </footer>
+        </div>
+    </div>
+
+    <!-- Modal for Survey -->
+    <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalScrollableTitle">Friend Finder Survey</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Name (Required)</label>
+                            <input type="text" class="form-control" id="name" placeholder="Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="photo">Link a Photo Image (Required)</label>
+                            <input type="text" class="form-control" id="photo" placeholder="Link">
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <h5>Question One</h5>
+                            <label for="questionOne">Your mind is always buzzing with unexplored ideas and
+                                plans.</label>
+                            <select class="form-control" id="questionOne">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <h5>Question Two</h5>
+                            <label for="questionTwo">Generally speaking, you rely more on your experience than your
+                                imagination.</label>
+                            <select class="form-control" id="questionTwo">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <h5>Question Three</h5>
+                            <label for="questionThree">You find it easy to stay relaxed and focused even when there is
+                                some
+                                pressure.</label>
+                            <select class="form-control" id="questionThree">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <h5>Question Four</h5>
+                            <label for="questionFour">You rarely do something just out of sheer curiosity.</label>
+                            <select class="form-control" id="questionFour">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <h5>Question Five</h5>
+                            <label for="questionFive">People can rarely upset you.</label>
+                            <select class="form-control" id="questionFive">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <h5>Question Six</h5>
+                            <label for="questionSix">It is often difficult for you to relate to other people’s
+                                feelings.</label>
+                            <select class="form-control" id="questionSix">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <h5>Question Seven</h5>
+                            <label for="questionSeven">In a discussion, truth should be more important than people’s
+                                sensitivities.</label>
+                            <select class="form-control" id="questionSeven">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <h5>Question Eight</h5>
+                            <label for="questionEight">You rarely get carried away by fantasies and ideas.</label>
+                            <select class="form-control" id="questionEight">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <h5>Question Nine</h5>
+                            <label for="questionNine">You think that everyone’s views should be respected regardless of
+                                whether
+                                they are supported by facts or
+                                not.
+                            </label>
+                            <select class="form-control" id="questionNine">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <h5>Question Ten</h5>
+                            <label for="questionTen">You feel more energetic after spending time with a group of
+                                people.</label>
+                            <select class="form-control" id="questionTen">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Close</button>
+                    <a data-dismiss="modal" data-toggle="modal">
+                        <button type="submit" id="submit"
+                            class="btn btn-primary submit btn-lg btn-block">Submit</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adding Video to Background-->
+    <video id="video-background-survey" autoplay muted loop plays-inline>
+        <source src="assets/images/sanFran.mp4" type="video/mp4">
+    </video>
+
+    <!-- 
+    Original Video:
+    Author: Hamster Bennett
+    Title: Driving Around San Francisco - #1
+    YouTube: https://www.youtube.com/watch?v=DA7uu_wrnQ4&t=294s
+  -->
+
+    <!-- Text Overlay-->
+    <div class="jumbotron jumbotron-fluid">
+        <div class="homeContents">
+            <h1 class="display-4" id="title">Friend Finder</h1>
+            <p class="lead">Find your best friends in seconds!</p>
+        </div>
+    </div>
+    <div id="survey">
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModalScrollable">
+            Find Friends
+        </button>
+    </div>
+    <footer id="footer">
+        <div class="container">
+            <p><a href="/api/friends">API Friends</a> | <a
+                    href="https://github.com/kathryn-breslin/FindFriends">FindFriends
+                    GitHub Repo</a></p>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+        $('#submit').on('click', function (event) {
+            event.preventDefault();
+            var newFriend = {
+                name: $('#name').val(),
+                photo: $('#photo').val(),
+                scores: [
+                    parseInt($('#questionOne').val()),
+                    parseInt($('#questionTwo').val()),
+                    parseInt($('#questionThree').val()),
+                    parseInt($('#questionFour').val()),
+                    parseInt($('#questionFive').val()),
+                    parseInt($('#questionSix').val()),
+                    parseInt($('#questionSeven').val()),
+                    parseInt($('#questionEight').val()),
+                    parseInt($('#questionNine').val()),
+                    parseInt($('#questionTen').val())
+                ]
+            }
+            console.log(newFriend);
+
+            $.post("/api/friends", newFriend, function (data) {
+                if (data) {
+                    console.log("You have been added to the database.")
+                    $('#matchName').text(data.name);
+                    $('#matchImg').attr('src', data.photo);
+                    $("#matchModal").modal("toggle");
+                }
+                else {
+                    console.log("Error")
+                }
+
+                $('#name').val("");
+                $('#photo').val("");
+                $('#questionOne').val("");
+                $('#questionTwo').val("");
+                $('#questionThree').val("");
+                $('#questionFour').val("");
+                $('#questionFive').val("");
+                $('#questionSix').val("");
+                $('#questionSeven').val("");
+                $('#questionEight').val("");
+                $('#questionNine').val("");
+                $('#questionTen').val("");
+
+            })
+        })
+    </script>
 </body>
 
 </html>
